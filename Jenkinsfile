@@ -8,8 +8,19 @@ pipeline {
     }
 
     stage('Log') {
-      steps {
-        sh 'ls -la'
+      parallel {
+        stage('Log') {
+          steps {
+            sh 'ls -la'
+          }
+        }
+
+        stage('test') {
+          steps {
+            sh 'la -al'
+          }
+        }
+
       }
     }
 
@@ -21,7 +32,7 @@ pipeline {
 
     stage('Log into Dockerhub') {
       environment {
-        Creds = credentials("dockerhub")
+        Creds = credentials('dockerhub')
       }
       steps {
         sh 'docker login -u $Creds_USR -p $Creds_PSW'
